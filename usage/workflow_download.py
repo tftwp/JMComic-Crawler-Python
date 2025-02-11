@@ -1,66 +1,68 @@
-from jmcomic import *
-from jmcomic.cl import JmcomicUI
+从……起jmcomic进口 *
+从……起jmcomic.cl进口JmcomicUI
 
 # 下方填入你要下载的本子的id，一行一个，每行的首尾可以有空白字符
-jm_albums = '''
-
-
+JM_albums='''
+jm849651
+849651
+jm849651
+849651
 
 '''
 
 # 单独下载章节
-jm_photos = '''
-
-
+JM_photos='''
+jm849651
+849651
 849651
 '''
 
 
-def env(name, default, trim=('[]', '""', "''")):
-    import os
-    value = os.getenv(name, None)
-    if value is None or value == '':
-        return default
+定义 env(名称，默认值，修剪=('[]','""',"''")):
+    进口操作系统
+值=os.getenv(姓名，没有一个)
+    如果价值是 没有一个 或value=='':
+        返回默认
 
-    for pair in trim:
-        if value.startswith(pair[0]) and value.endswith(pair[1]):
-            value = value[1:-1]
+    为一对在……内修剪：
+        如果价值。startswith(一对[0]) 和价值。endswith(一对[1]):
+value=value[1:-1]
 
-    return value
+    返回价值
 
 
-def get_id_set(env_name, given):
-    aid_set = set()
-    for text in [
-        given,
-        (env(env_name, '')).replace('-', '\n'),
+定义 get_id_set(环境名称，给定):
+aid_set=设置()
+    为文本在……内 [
+鉴于，
+        (env(环境名称，'')).取代('-','\n'),
     ]:
-        aid_set.update(str_to_set(text))
+aid_set。更新(str_to_set(文本))
 
-    return aid_set
-
-
-def main():
-    album_id_set = get_id_set('JM_ALBUM_IDS', jm_albums)
-    photo_id_set = get_id_set('JM_PHOTO_IDS', jm_photos)
-
-    helper = JmcomicUI()
-    helper.album_id_list = list(album_id_set)
-    helper.photo_id_list = list(photo_id_set)
-
-    option = get_option()
-    helper.run(option)
-    option.call_all_plugin('after_download')
+    返回aid_set
 
 
-def get_option():
-    # 读取 option 配置文件
-    option = create_option(os.path.abspath(os.path.join(__file__, '../../assets/option/option_workflow_download.yml')))
+定义 主要的():
+album_id_set=get_id_set('JM_ALBUM_IDS'，jm_ablums)
+photo_id_set=get_id_set('JM_PHOTO_IDS'，jm_photos)
+
+helper=JmcomicUI()
+助手。album_id_list=列表(album_id_set)
+助手。photo_id_list=列表(photo_id_set)
+
+option=get_option()
+助手。跑(选项)
+选项。call_all_plugin('下载后')
+
+
+定义 get_option():
+    #读取选项配置文件
+option=create_option(操作系统。路径.abspath(操作系统。路径.参加(__file__，'。。/。。/assets/option/option_workflow_download.yml')))
 
     # 支持工作流覆盖配置文件的配置
-    cover_option_config(option)
+    cover_option_config(选项)
 
-    # 把请求错误的html下载到文件，方便GitHub Actions下载查看日志
+    #把请求错误的html下载到文件，方便GitHub Actions下载查看日志
     log_before_raise()
 
     return option
